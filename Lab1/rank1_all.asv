@@ -1,0 +1,44 @@
+% obiekt pierwszego rzędu
+global T Y_i;
+global Y_b F P Z;
+
+data = csvread("NewFile3.csv",2,0);
+Ts_i = (0:0.05:11)
+T = (0:1:11);
+Y_i = data(100:100:1200, 2)
+Y_i = data(100:100:1200, 2) + abs(Y_i(1))
+
+Xo_i = [1.1 1];
+X_i = fminsearch('rank1', Xo_i);
+Ls_i = [X_i(1)];
+Ms_i = [X_i(2) 1];
+
+Ys_i = step(Ls_i, Ms_i, Ts_i);
+
+plot(Ts_i, Ys_i, T, Y_i, 'x')
+grid on;
+disp(Ls_i);
+disp(Ms_i)
+roots(Ls_i)
+roots(Ms_i)
+
+% ---------------------
+
+
+
+
+
+tiledlayout(2,1);
+nexttile;
+semilogx(Fs_b, mag, F, Y_b, 'x');
+grid on;
+
+nexttile;
+loglog(Fs_b, phase, F, P, 'x');
+grid on;
+
+disp(Ls)
+disp(Ms)
+
+roots(Ls)
+roots(Ms)

@@ -1,0 +1,16 @@
+function J = A_bode_f(X_b)
+
+global F1 Y1 P1 Z;
+
+Ls = [X_b(1)];
+Ms = [X_b(2) X_b(3) X_b(4) X_b(5)];
+aaa = tf([Ls],[Ms])
+[m, p, w] = bode(aaa, F);
+
+zesp = m(:) .* exp(1i*deg2rad(p(:))); % zamiana amplitudy i fazy na liczby zespolone
+
+% J = sum((P.' - p).^2 + (Y.' - m).^2); % Dopasowanie do obu charakterystyk
+% J = sum((P.' - p).^2);                 % Dopasowanie do charakterystyki fazowej
+% J = sum((Y_b.' - m).^2);                 % Dopasowanie do charakterystyki amplitudowej
+J = sum((imag(Z.' - zesp)).^2 + (real(Z.' - zesp).^2)) % Super fajna metoda na liczbach zespolonych
+end
