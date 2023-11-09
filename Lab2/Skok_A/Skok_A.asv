@@ -1,0 +1,25 @@
+% obiekt drugiego rzędu
+global T Y;
+
+data1 = csvread("NewFile12.csv",2,0);
+increment1 = 2e-5
+Ts1 = (0:increment1/10:10*100*increment1)
+T1 = (0:increment1*100:10*100*increment1);
+Y1 = data(195:100:1200, 2)
+Y1 = data(195:100:1200, 2) + abs(Y(1))
+
+Xo = [1 1e-9 1e-6 1e-3 1];
+X = fminsearch('Skok_A_f', Xo);
+Ls = [X(1)];
+Ms = [X(2) X(3) X(4) X(5)];
+
+Ys = step(Ls, Ms, Ts);
+
+plot(Ts, Ys, T, Y, 'x')
+grid on;
+disp(Ls);
+disp(Ms)
+roots(Ls)
+roots(Ms)
+tf([Ls],[Ms])
+plot(Ts, Ys, T, Y, 'x')
