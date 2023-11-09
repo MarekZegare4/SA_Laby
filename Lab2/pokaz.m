@@ -25,8 +25,10 @@ DVout = [1.1 1.11 1.38 1.71 2.08 5.88 6.16];
 Dphas = [-8.14 -21.47 -48.6 -63.64 -73.8 -157.9 -175.6];
 Dfreq = [20 40 100 150 200 2000 10000];
 
-A = tf([7.201e9],[1 2727 5.465e6 7.098e9])
-A1 = tf([5.528e9],[1 2839 5.566e6 5.542e9])
+A1 = tf([1.559],[3.448e-10 8.484e-7 0.001744 1.498])
+A2 = tf([1.53],[2.77e-10 6.581e-7 0.001347 1.479])
+A3 = tf([9.579e9],[1 2980 5.766e6 9.544e9])
+A1_B = tf([5.528e9],[1 2839 5.566e6 5.542e9])
 EVout = [0.966 1.06 0.934 0.447 0.224 0.024];
 Ephas = [-3.6 -57 -139.6 -190 -214 -246.6];
 Efreq = [10 150 300 400 500 1000];
@@ -203,21 +205,25 @@ Efreq = [10 150 300 400 500 1000];
 %2 BODE A
 Fs = 2*pi*(10:0.05:1000);
 [mag1, phase1, wout1] = bode(A1, Fs);
-[mag2, phase2, wout2] = bode(A, Fs);
-
+[mag2, phase2, wout2] = bode(A2, Fs);
+[mag3, phase3, wout3] = bode(A3, Fs);
+ 
 tiledlayout(2,1);
 nexttile;
-semilogx(Fs, mag2db(mag1(:)), Fs, mag2db(mag2(:)), Efreq*2*pi, mag2db(EVout), 'o');
+semilogx(Fs, mag2db(mag1(:)), Fs, mag2db(mag2(:)), Fs, mag2db(mag3(:)), Efreq*2*pi, mag2db(EVout), 'o');
 grid on;
 xlabel("Pulsacja [rad/s]")
 ylabel("Amplituda [dB]")
-legend("bode", "skokowa")
+legend("1", "2", "3")
 title("3 rzad")
-
+ 
 nexttile;
-semilogx(Fs, phase1(:), Fs, phase2(:), Efreq*2*pi, Ephas, 'o');
+semilogx(Fs, phase1(:), Fs, phase2(:), Fs, phase3(:), Efreq*2*pi, Ephas, 'o');
 grid on;
 xlabel("Pulsacja [rad/s]")
 ylabel("Faza [°]")
 fontsize(15,"pixels")
-legend("bode", "skokowa")
+legend("1", "2", "3")
+
+figure(2)
+step(A1, A2, A3)

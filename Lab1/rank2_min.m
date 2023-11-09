@@ -1,7 +1,7 @@
 % obiekt drugiego rzędu
 global T Y;
 
-data = csvread("NewFile5.csv",2,0);
+data = csvread("NewFile12.csv",2,0);
 Ts = (0:5e-7:10*100*5e-6)
 T = (0:5e-06*100:10*100*5e-06);
 Y = data(200:100:1200, 2)

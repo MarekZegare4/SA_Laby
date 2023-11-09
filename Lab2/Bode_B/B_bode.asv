@@ -116,8 +116,8 @@ srednia(2) = minreal(feedback(srednia(2),kp(2)));
 srednia(3) = minreal(feedback(srednia(3),kp(3)));
 
 sredniaf(1) = feedback(tf(k(1)*[kwm*Txm kwm],[Tim*Tym Tim 0 ]),kpm);
-sredniaf(2) = feedback(tf(k(2)*[kwm*Txm kwm],[Tim*Tym Tim 0 ]),kpm);
-sredniaf(3) = feedback(tf(k(3)*[kwm*Txm kwm],[Tim*Tym Tim 0 ]),kpm);
+sredniaf(2) = feedback(tf([kwm*Txm kwm],[Tim*Tym Tim 0 ]),kpm);
+sredniaf(3) = feedback(tf([kwm*Txm kwm],[Tim*Tym Tim 0 ]),kpm);
 
 figure(6)
 opts = bodeoptions('cstprefs');

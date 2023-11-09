@@ -13,9 +13,9 @@
 % 19 od 195
 % 20 od 195
 
-data = csvread("CSV/NewFile18.csv",2,0)
-ch1 = data(195:1200, 1)
-ch2 = data(195:1200, 2)
+data = csvread("Skok_A/NewFile14.csv",2,0)
+ch1 = data(435:1200, 1)
+ch2 = data(435:1200, 2)
 ch1 = ch1 + abs(ch1(1))
 ch2 = ch2 + abs(ch2(2))
 plot(ch1)
