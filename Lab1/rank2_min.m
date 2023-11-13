@@ -7,9 +7,9 @@ T = (0:5e-06*100:10*100*5e-06);
 Y = data(200:100:1200, 2)
 Y = data(200:100:1200, 2) + abs(Y(1))
 
-Xo = [1 1];
+Xo = [2.436e-07 0.0006401 1];
 X = fminsearch('rank2', Xo);
-Ls = [1];
+Ls = [X(3)];
 Ms = [X(1) X(2) 1];
 
 Ys = step(Ls, Ms, Ts);
@@ -21,4 +21,4 @@ disp(Ms)
 roots(Ls)
 roots(Ms)
 tf([Ls],[Ms])
-createfigure_2_rzad(Ts, Ys, T, Y)
+%createfigure_2_rzad(Ts, Ys, T, Y)

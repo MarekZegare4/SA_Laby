@@ -7,6 +7,9 @@ Vout = [1.07 1.3 2.13 2.79 1.29 0.51;
     1.06 1.27 1.92 2.09 1.09 0.452; 
     1.07 1.32 2.27 3.7 1.48 0.54];
 
+k=[0.2 0.1 0.3];
+k = 0.47 +k/2;
+
 phas = [-3.6 -41.4 -86.2 -152 -217.8 -263.8;
     -5.4 -45 -96.48 -160.7 -212.2 -246.6;
     -5.4 -37.8 -76.32 -147.7 -220.4 -260.2];
@@ -119,13 +122,50 @@ sredniaf(1) = feedback(tf(k(1)*[kwm*Txm kwm],[Tim*Tym Tim 0 ]),kpm);
 sredniaf(2) = feedback(tf(k(2)*[kwm*Txm kwm],[Tim*Tym Tim 0 ]),kpm);
 sredniaf(3) = feedback(tf(k(3)*[kwm*Txm kwm],[Tim*Tym Tim 0 ]),kpm);
 
-figure(6)
-opts = bodeoptions('cstprefs');
-%opts.PhaseWrapping='on';
+% figure(6)
+% opts = bodeoptions('cstprefs');
+% %opts.PhaseWrapping='on';
+% 
+% bodeplot(srednia(1), srednia(2), srednia(3), Tf1, Tf2, Tf3,opts)
+% 
+% figure(7)
+% bode(sredniaf(1), sredniaf(2), sredniaf(3), Tf1, Tf2, Tf3)
 
-bodeplot(srednia(1), srednia(2), srednia(3), Tf1, Tf2, Tf3,opts)
+T = 1.31e-3 *1;
 
-figure(7)
-bode(sredniaf(1), sredniaf(2), sredniaf(3), Tf1, Tf2, Tf3)
+Lsnowe = [-1.455087212651025e-03 ,  1.121290582714048e+00 ] *1.155;
+Msnowe = [2.353259299996272e-04, 1, 0]*T;
 
+tfa1 = feedback(tf(Lsnowe*k(1),Msnowe),1);
+tfa2 = feedback(tf(Lsnowe*k(2),Msnowe),1);
+tfa3 = feedback(tf(Lsnowe*k(3),Msnowe),1);
+
+
+figure(8)
+rlocus(Lsnowe,Msnowe)
+
+kgr = 0.82;
+
+figure(9)
+
+[m1, p1, w1] = bode(tfa1, Fs);
+[m2, p2, w2] = bode(tfa2, Fs);
+[m3, p3, w3] = bode(tfa3, Fs);
+
+tiledlayout(2,1);
+nexttile;
+semilogx(Fs, mag2db(m1(:)), Fs, mag2db(m2(:)), Fs, mag2db(m3(:)), F1, mag2db(Y1), 'o', F2, mag2db(Y2), 'o', F3, mag2db(Y3), 'o');
+grid on;
+xlabel("Pulsacja [rad/s]")
+ylabel("Amplituda [dB]")
+legend()
+title("Charakterystyki Bodego układu B")
+
+nexttile;
+semilogx(Fs, p1(:)-360 , Fs, p2(:)-360 , Fs, p3(:)-360 , F1, P1, 'o', F2, P2, 'o', F3, P3, 'o');
+grid on;
+xlabel("Pulsacja [rad/s]")
+ylabel("Faza [°]")
+%fontsize(15,"pixels")
+legend()
 

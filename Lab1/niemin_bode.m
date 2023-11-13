@@ -10,21 +10,21 @@ freq = freq*2*pi;
 
 % zamiana amplitudy i fazy na liczby zespolone
 zesp = Vout .* exp(1i*deg2rad(phas)); 
-Z = zesp
+Z = zesp;
 
 % W Fs ustaw zakres częstotliwości taki sam, jak w twoich pomiarach
 Fs = (20:0.05:10000);
-Fs = Fs*2*pi
+Fs = Fs*2*pi;
 
 F = freq;
 Y_b = Vout;
 P = phas;
 
 % Wybierz wektor Xo, sprawdź kilka razy - możesz trafić na minimum lokalne
-Xo = [1.1 1];
+Xo = [1.1 1 1];
 
 X_b = fminsearch('niemin_f_bode', Xo);
-Ls = [X_b(1) 1];
+Ls = [X_b(1)*X_b(3) X_b(3)];
 Ms = [X_b(2) 1];
 
 
@@ -36,7 +36,7 @@ semilogx(Fs, mag2db(mag), F, mag2db(Y_b), 'x');
 grid on;
 
 nexttile;
-semilogx(Fs, phase, F, P, 'x');
+semilogx(Fs, phase -360, F, P, 'x');
 grid on;
 
 disp(Ls)

@@ -2,7 +2,7 @@ function J =niemin_f(X)
 
 global F Y_b P Z;
 
-Ls = [X(1) 1];
+Ls = [X(1)*X(3) X(3)];
 Ms = [X(2) 1];
 [m, p, w] = bode(Ls, Ms, F);
 
