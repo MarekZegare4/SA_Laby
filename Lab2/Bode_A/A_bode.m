@@ -1,6 +1,6 @@
 % Obiekt pierwszego rzędu - minimalizacja Bode
 
-global DANE ZFULL uklad k;
+global DANE ZFULL uklad k Ms;
 
 % Poniżej wpisz swoje dane
 Vout = [0.966 1.06 0.934 0.447 0.224 0.024; 1.04 1.07 1.47 0.647 0.284 0.03; 1.04 1.11 2.36 0.97 0.334 0.0388];
@@ -34,8 +34,6 @@ k = 0.47 +k/2;
 
 
 
-
-
 F1 = freq(1,:);
 Y1 = Vout(1,:);
 P1 = phas(1,:);
@@ -51,24 +49,26 @@ P3 = phas(3,:);
 DANE = [F1;Y1;P1;F2;Y2;P2;F3;Y3;P3];
 
 % Wybierz wektor Xo, sprawdź kilka razy - możesz trafić na minimum lokalne
-Xo1 = [1 1.8342e-10 1e-6 1e-3 1];
-Xo2 = [1 1.8342e-10 1e-6 1e-3 1];
-Xo3 = [1 1.8342e-10 1e-6 1e-3 1];
+Xo1 = [2.4 1.8342e-10 1e-6 1e-3 1];
+Xo2 = [2.4 1.8342e-10 1e-6 1e-3 1];
+Xo3 = [2.4 1.8342e-10 1e-6 1e-3 1];
+
+Ms =  conv([2.392e-7 0.0006403 1], [1.29e-3 0]);
 
 X1 = fminsearch('A_bode_f_A', Xo1);
-Ls1 = [X1(1)];
-Ms1 = [X1(2) X1(3) X1(4) X1(5)];
-Tf1 = tf([Ls1],[Ms1]);
+Ls1 = [X1(1)*k(1)];
+%Ms1 = [X1(2) X1(3) X1(4) X1(5)];
+Tf1 = feedback(tf([Ls1],[Ms]), 1);
 
 X2 = fminsearch('A_bode_f_B', Xo2);
-Ls2 = [X2(1)];
-Ms2 = [X2(2) X2(3) X2(4) X2(5)];
-Tf2 = tf([Ls2],[Ms2]);
+Ls2 = [X2(1)*k(2)];
+%Ms2 = [X2(2) X2(3) X2(4) X2(5)];
+Tf2 = feedback(tf([Ls2],[Ms]), 1);
 
 X3 = fminsearch('A_bode_f_C', Xo3);
-Ls3 = [X3(1)];
-Ms3 = [X3(2) X3(3) X3(4) X3(5)];
-Tf3 = tf([Ls3],[Ms3]);
+Ls3 = [X3(1)*k(3)];
+%Ms3 = [X3(2) X3(3) X3(4) X3(5)];
+Tf3 = feedback(tf([Ls3],[Ms]), 1);
 
 [mag1, phase1, wout1] = bode(Tf1, Fs);
 [mag2, phase2, wout2] = bode(Tf2, Fs);
@@ -97,65 +97,65 @@ tf(Tf1)
 tf(Tf2)
 tf(Tf3)
 
-% figure(3)
-% %[k_2 Ti]
+% % figure(3)
+% % %[k_2 Ti]
+% % 
+% % uklad =1;
+% % 
+% % Xn1 = [1 Ti];%
+% % 
+% % Xn = fminsearch('bode_min',Xn1)
+% % Xn = [Xn, a1 a2];
+% % Xn(2) = Xn(2);
+% % Tf = tf(Xn(1)*k(1),[Xn(2)*a1 Xn(2)*a2 Xn(2) 0]);
+% % Tf = feedback(Tf,1)
+% % bode(Tf)
 % 
-% uklad =1;
 % 
-% Xn1 = [1 Ti];%
+% wzm_petl =[X1(5)/X1(1) ,X2(5)/X2(1),X3(5)/X3(1)]
+% Ti_n = [X1(4), X2(4), X3(4)]
+% a1_n = [X1(2)/X1(4) X2(2)/X2(4) X3(2)/X3(4)]
+% a2_n = [X1(3)/X1(4) X2(3)/X2(4) X3(3)/X3(4)]
+% k2_n = [X1(1) X2(1) X3(1)]./k
 % 
-% Xn = fminsearch('bode_min',Xn1)
-% Xn = [Xn, a1 a2];
-% Xn(2) = Xn(2);
-% Tf = tf(Xn(1)*k(1),[Xn(2)*a1 Xn(2)*a2 Xn(2) 0]);
-% Tf = feedback(Tf,1)
-% bode(Tf)
-
-
-wzm_petl =[X1(5)/X1(1) ,X2(5)/X2(1),X3(5)/X3(1)]
-Ti_n = [X1(4), X2(4), X3(4)]
-a1_n = [X1(2)/X1(4) X2(2)/X2(4) X3(2)/X3(4)]
-a2_n = [X1(3)/X1(4) X2(3)/X2(4) X3(3)/X3(4)]
-k2_n = [X1(1) X2(1) X3(1)]./k
-
-wzm_petlm = mean(wzm_petl);
-Tin = mean(Ti_n);
-a1n = mean(a1_n);
-a2n = mean(a2_n);
-k2n = mean(k2_n);
-
-% figure(4)
-% tiledlayout(5,1);
-% nexttile;
-% plot(k,wzm_petl,'o')
-% nexttile;
-% plot(k,Ti_n,'x')
-% nexttile;
-% plot(k,a1_n,'s')
-% nexttile;
-% plot(k,a2_n,'+')
-% nexttile;
-% plot(k,k2_n, 'o')
-
-kloc1 = tf(k(1)*k2_n(1),[Ti_n(1)*a1_n(1) Ti_n(1)*a2_n(1) Ti_n(1) 0 ]);
-kloc1 = feedback(kloc1,wzm_petl(1))
-
-srednia(1) = tf(k(1)*k2n(1),[Tin(1)*a1n(1) Tin(1)*a2n(1) Tin(1) 0 ]);
-srednia(2) = tf(k(2)*k2n(1),[Tin(1)*a1n(1) Tin(1)*a2n(1) Tin(1) 0 ]);
-srednia(3) = tf(k(3)*k2n(1),[Tin(1)*a1n(1) Tin(1)*a2n(1) Tin(1) 0 ]);
-
-srednia(1) = minreal(feedback(srednia(1),wzm_petlm));
-srednia(2) = minreal(feedback(srednia(2),wzm_petlm));
-srednia(3) = minreal(feedback(srednia(3),wzm_petlm));
-
-figure(6)
-bode(srednia(1), srednia(2), srednia(3), Tf1, Tf2, Tf3)
-
-figure(5)
-
-opts = bodeoptions('cstprefs');
-%opts.PhaseWrapping='on';
-opts.PhaseMatching = 'on';
-bodeplot(kloc1, opts)
-
-
+% wzm_petlm = mean(wzm_petl);
+% Tin = mean(Ti_n);
+% a1n = mean(a1_n);
+% a2n = mean(a2_n);
+% k2n = mean(k2_n);
+% 
+% % figure(4)
+% % tiledlayout(5,1);
+% % nexttile;
+% % plot(k,wzm_petl,'o')
+% % nexttile;
+% % plot(k,Ti_n,'x')
+% % nexttile;
+% % plot(k,a1_n,'s')
+% % nexttile;
+% % plot(k,a2_n,'+')
+% % nexttile;
+% % plot(k,k2_n, 'o')
+% 
+% kloc1 = tf(k(1)*k2_n(1),[Ti_n(1)*a1_n(1) Ti_n(1)*a2_n(1) Ti_n(1) 0 ]);
+% kloc1 = feedback(kloc1,wzm_petl(1))
+% 
+% srednia(1) = tf(k(1)*k2n(1),[Tin(1)*a1n(1) Tin(1)*a2n(1) Tin(1) 0 ]);
+% srednia(2) = tf(k(2)*k2n(1),[Tin(1)*a1n(1) Tin(1)*a2n(1) Tin(1) 0 ]);
+% srednia(3) = tf(k(3)*k2n(1),[Tin(1)*a1n(1) Tin(1)*a2n(1) Tin(1) 0 ]);
+% 
+% srednia(1) = minreal(feedback(srednia(1),wzm_petlm));
+% srednia(2) = minreal(feedback(srednia(2),wzm_petlm));
+% srednia(3) = minreal(feedback(srednia(3),wzm_petlm));
+% 
+% figure(6)
+% bode(srednia(1), srednia(2), srednia(3), Tf1, Tf2, Tf3)
+% 
+% figure(5)
+% 
+% opts = bodeoptions('cstprefs');
+% %opts.PhaseWrapping='on';
+% opts.PhaseMatching = 'on';
+% bodeplot(kloc1, opts)
+% 
+% 

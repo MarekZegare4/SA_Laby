@@ -207,7 +207,7 @@ Fs = 2*pi*(10:0.05:1000);
 [mag1, phase1, wout1] = bode(A1, Fs);
 [mag2, phase2, wout2] = bode(A2, Fs);
 [mag3, phase3, wout3] = bode(A3, Fs);
- 
+
 tiledlayout(2,1);
 nexttile;
 semilogx(Fs, mag2db(mag1(:)), Fs, mag2db(mag2(:)), Fs, mag2db(mag3(:)), Efreq*2*pi, mag2db(EVout), 'o');
@@ -216,7 +216,7 @@ xlabel("Pulsacja [rad/s]")
 ylabel("Amplituda [dB]")
 legend("1", "2", "3")
 title("3 rzad")
- 
+
 nexttile;
 semilogx(Fs, phase1(:), Fs, phase2(:), Fs, phase3(:), Efreq*2*pi, Ephas, 'o');
 grid on;
@@ -227,3 +227,19 @@ legend("1", "2", "3")
 
 figure(2)
 step(A1, A2, A3)
+
+% % R1 POWTORZONY
+% data = csvread("CSV/NewFile10.csv",2,0);
+% Ts = (0:1e-7:10*100*1e-5);
+% T = (0:1e-05*100:10*100*1e-5)
+% Y = data(180:100:1200, 1)
+% Y = data(180:100:1200, 1) + abs(Y(1))
+% 
+% [y1, tout1] = step(tf([1079],[1 733.3]), Ts)
+% 
+% plot(Ts, y1(:), T, Y, 'o')
+% xlabel("Czas [s]")
+% ylabel("y(t) [V]")
+% title("Odpowiedź skokowa układu I rzędu")
+% legend("model A","Punkty pomiarowe")
+% grid on;

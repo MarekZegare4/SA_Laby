@@ -1,6 +1,6 @@
 % Obiekt pierwszego rzędu - minimalizacja Bode
 
-global Y1 Y2 Y3 F1 F2 F3 P1 P2 P3 Z1 Z2 Z3;
+global Y1 Y2 Y3 F1 F2 F3 P1 P2 P3 Z1 Z2 Z3 Ms;
 
 % Poniżej wpisz swoje dane
 Vout = [0.484 0.412 0.352 0.264 0.184 0.0756; 0.564 0.496 0.436 0.338 0.242 0.104; 0.62 0.556 0.508 0.408 0.294 0.130];
@@ -31,24 +31,26 @@ Y3 = Vout(3,:);
 P3 = phas(3,:);
 
 % Wybierz wektor Xo, sprawdź kilka razy - możesz trafić na minimum lokalne
-Xo1 = [916.8 1 1963];
-Xo2 = [916.8 1 1963];
-Xo3 = [916.8 1 1963];
+Xo1 = [1 1 1963];
+Xo2 = [1 1 1963];
+Xo3 = [1 1 1963];
+
+Ms = ([0.002354 1])
 
 X1 = fminsearch('D_bode_f_A', Xo1);
 Ls1 = [X1(1)];
 Ms1 = [X1(2) X1(3)];
-Tf1 = tf([Ls1],[Ms1]);
+Tf1 = feedback(tf([Ls1],[Ms]), 1);
 
 X2 = fminsearch('D_bode_f_B', Xo2);
 Ls2 = [X2(1)];
 Ms2 = [X2(2) X2(3)];
-Tf2 = tf([Ls2],[Ms2]);
+Tf2 = feedback(tf([Ls2],[Ms]), 1);
 
 X3 = fminsearch('D_bode_f_C', Xo3);
 Ls3 = [X3(1)];
 Ms3 = [X3(2) X3(3)];
-Tf3 = tf([Ls3],[Ms3]);
+Tf3 =  feedback(tf([Ls3],[Ms]), 1);
 
 [mag1, phase1, wout1] = bode(Tf1, Fs);
 [mag2, phase2, wout2] = bode(Tf2, Fs);

@@ -1,10 +1,10 @@
 function J = D_bode_f_C(X)
 
-global F3 Z3;
+global F3 Z3 Ms;
 
 Ls = [X(1)];
-Ms = [X(2) X(3)];
-Tf = tf([Ls],[Ms]);
+%Ms = [X(2) X(3)];
+Tf = feedback(tf([Ls],[Ms]), 1);
 [m, p, w] = bode(Tf, F3);
 
 zesp = m(:) .* exp(1i*deg2rad(p(:))); % zamiana amplitudy i fazy na liczby zespolone
