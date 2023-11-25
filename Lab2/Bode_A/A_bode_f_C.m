@@ -2,7 +2,7 @@ function J = A_bode_f_C(X)
 
 global DANE ZFULL Ms k
 
-Ls = [X(1)*k(3)];
+Ls = [X(1)];
 Tf = feedback(tf([Ls],[Ms]), 1);
 [m, p, w] = bode(Tf, DANE(7));
 

@@ -1,0 +1,16 @@
+% ABTRONIC BEZ WODY
+abTzbw = [50.2 70.5 100.6 120.2 150.5 170.7 201.9 220.7 253];
+abTpbw = [50.1 69 101.2 121.5 152.2 173 206.7 224.5 257.6];
+
+
+
+%ABTRONIC Z PARA
+abTzw = [50.2 70.1 100.3 120.2 150.6 170.8 202.1 221.4 252];
+abTpw = [50.5 66.3 100.6 119.7 151 171.5 200.7 223 255];
+
+plot(abTzbw, abTpbw, 'o--', abTzw, abTpw, 'o--')
+xlabel("Tz [°C]");
+ylabel("Tp [°C]")
+title("Abatronic AB-8855")
+legend("Bez pa", "")
+grid on;
