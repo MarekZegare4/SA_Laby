@@ -250,44 +250,61 @@ calkpop = tf(1,[7.3e-4 0]);
 % grid on;
 
 % Linie pierwiastkowe r3
-figure(1)
-k1 = [0.5 1 1.5 2.4];
-k1 = 0.47 + k1/2;
-r3 = r2pop*calkpop
-rlocus(feedback(r2pop*calkpop*k1(1),1), feedback(r2pop*calkpop*k1(2),1), feedback(r2pop*calkpop*k1(3),1), feedback(r2pop*calkpop*k1(4),1))
-title('Linie pierwiastkowe układu III rzędu')
-xlabel('Oś realis')
-ylabel('Oś imaginaris')
-legend('k = 0,72', 'k = 0,97', 'k = 1,22', '$k = k\_{gr} = 1,67$', 'Interpreter','latex')
-axis([-4000 1000 -6000 6000])
+% figure(1)
+% k1 = [0.5 1 1.5 2.4];
+% k1 = 0.47 + k1/2;
+% r3 = r2pop*calkpop
+% rlocus(feedback(r2pop*calkpop*k1(1),1), feedback(r2pop*calkpop*k1(2),1), feedback(r2pop*calkpop*k1(3),1), feedback(r2pop*calkpop*k1(4),1))
+% title('Linie pierwiastkowe układu III rzędu')
+% xlabel('Oś realis')
+% ylabel('Oś imaginaris')
+% legend('k = 0,72', 'k = 0,97', 'k = 1,22', '$k = k\_{gr} = 1,67$', 'Interpreter','latex')
+% axis([-4000 1000 -6000 6000])
+% 
+% figure(2)
+% % Nyquist r3
+% nyquist(r3*k1(1), r3*k1(2), r3*k1(3), r3*k1(4))
+% title('Wykres Nyquista układu III rzędu')
+% xlabel('Oś realis')
+% ylabel('Oś imaginaris')
+% legend('k = 0,72', 'k = 0,97', 'k = 1,22', '$k = k\_{gr} = 1,67$', 'Interpreter','latex')
+% axis([-1.7 0.1 -3 3])
+% 
+% figure(3)
+% % Linie pierwiastkowe nminfaz
+% k2 = [0 0.04 0.08 0.17];
+% k2 = 0.47 + k2/2;
+% nminfaz = nminpop*calkpop
+% rlocus(feedback(nminfaz*k2(1),1) , feedback(nminfaz*k2(2),1), feedback(nminfaz*k2(3),1), feedback(nminfaz*k2(4),1))
+% grid on;
+% title('Linie pierwiastkowe układu nieminimalnofazowego')
+% xlabel('Oś realis')
+% ylabel('Oś imaginaris')
+% legend('k = 0,47', 'k = 0,49', 'k = 0,51', '$k = k\_{gr} = 0,55$', 'Interpreter','latex')
+% axis([-1000 2000 -3000 3000])
+% 
+% figure(4)
+% % Nyquist nminfaz
+% nyquist(nminfaz*k2(1), nminfaz*k2(2), nminfaz*k2(3), nminfaz*k2(4))
+% title('Wykres Nyquista układu nieminimalnofazowego')
+% xlabel('Oś realis')
+% ylabel('Oś imaginaris')
+% legend('k = 0,47', 'k = 0,49', 'k = 0,51', '$k = k\_{gr} = 0,55$', 'Interpreter','latex')
+% axis([-1.2 0.1 -2 2])
 
-figure(2)
-% Nyquist r3
-nyquist(r3*k1(1), r3*k1(2), r3*k1(3), r3*k1(4))
-title('Wykres Nyquista układu III rzędu')
-xlabel('Oś realis')
-ylabel('Oś imaginaris')
-legend('k = 0,72', 'k = 0,97', 'k = 1,22', '$k = k\_{gr} = 1,67$', 'Interpreter','latex')
-axis([-1.7 0.1 -3 3])
+kp = 1.4634;
+kc =1.22;
+Tp = 1.3e-3;
 
-figure(3)
-% Linie pierwiastkowe nminfaz
-k2 = [0 0.04 0.08 0.17];
-k2 = 0.47 + k2/2;
-nminfaz = nminpop*calkpop
-rlocus(feedback(nminfaz*k2(1),1) , feedback(nminfaz*k2(2),1), feedback(nminfaz*k2(3),1), feedback(nminfaz*k2(4),1))
-grid on;
-title('Linie pierwiastkowe układu nieminimalnofazowego')
-xlabel('Oś realis')
-ylabel('Oś imaginaris')
-legend('k = 0,47', 'k = 0,49', 'k = 0,51', '$k = k\_{gr} = 0,55$', 'Interpreter','latex')
-axis([-1000 2000 -3000 3000])
+w = 0:10000;
+Gre = (Tp^2*(w.^2) +kp*kc + 1 +1j*(kp*kc*w*Tp))./(-1*(w.^2)*Tp^2 + kp^2*kc^2 +2*kp*kc +1);
+Gre = ((1j*w*Tp +1)./(1j*w*Tp + 1 +kp*kc));
 
-figure(4)
-% Nyquist nminfaz
-nyquist(nminfaz*k2(1), nminfaz*k2(2), nminfaz*k2(3), nminfaz*k2(4))
-title('Wykres Nyquista układu nieminimalnofazowego')
-xlabel('Oś realis')
-ylabel('Oś imaginaris')
-legend('k = 0,47', 'k = 0,49', 'k = 0,51', '$k = k\_{gr} = 0,55$', 'Interpreter','latex')
-axis([-1.2 0.1 -2 2])
+Gde = (-kp -kp^2*kc -1j*w*Tp)./(-1*(w.^2)*Tp^2 +kp^2*kc^2 +2*kp*kc +1);
+semilogy(w,abs(Gre))
+
+%bode(tf([Tp 1],[Tp 1+kc*kp]))
+
+
+
+
