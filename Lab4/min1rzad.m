@@ -8,7 +8,9 @@ M = [X(2) 1]; %X(2) = Ts
 
 sys = tf(L,M);
 
-Ys = step(sys,tm);
+opt = stepDataOptions("StepAmplitude",4.08);
+
+Ys = step(sys,tm, opt);
 wynik = sum((tachom-Ys).^2);
 
 end
