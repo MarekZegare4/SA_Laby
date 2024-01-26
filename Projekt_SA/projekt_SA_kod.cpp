@@ -50,6 +50,20 @@ void obiekt(double& syg, double& Y ){
 
 }
 
+void P(double& syg, double& wyj){
+    const double P = 1;
+    wyj = syg*P;
+}
+
+void nasycenie(double& syg,double& wyj){
+    const double gora = 5;
+    const double dol =-5;
+
+    syg > gora ? wyj = gora : wyj = syg;
+    syg < dol ? wyj = dol : wyj = syg;
+
+};
+
 
 int zapiszPlik(tabs tab, std::ofstream &plik){
 
@@ -61,7 +75,6 @@ int zapiszPlik(tabs tab, std::ofstream &plik){
 
     return 0;
 }
-
 
 
 
