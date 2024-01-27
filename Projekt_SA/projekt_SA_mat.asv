@@ -29,15 +29,14 @@ full = feedback(obiekt*ster,czujnik);
 
 
 figure(1)
-plot(czas,Y,'Color','Red') %'Marker','x','LineStyle','none','
+plot(czas,Y/(h),'Marker','x','LineStyle','none','Color','Red')
 title("Symulacja")
 hold on
 
 % figure(2)
-%step(full)
+st(czujnik,czasKoniec)
 
-
-%legend("Symulacja w c++ (podzielona przez 2h z jakiegoś powodu)", "impulse()")
+legend("Symulacja w c++ (podzielona przez 2h z jakiegoś powodu)", "impulse()")
 
 syms Ti Kp Tp a2 a1 Ti To s
 
