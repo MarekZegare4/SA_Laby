@@ -3,17 +3,20 @@
 
 typedef double liczba;
 
-const  liczba h = 0.0001;
-const int czasKoniec = 1;
+
+
+const  liczba h = 0.000001;
+const double czasKoniec = 1;
 const unsigned int dlugSym = int(czasKoniec/h +1); 
 
 const liczba Tp = 0.002249;
 const liczba Ti =0.00073;
-const liczba Kp = 2.483/50;
+const liczba Kp = 2.483;
 const liczba a1 =0.00069312;
 const liczba a2 = 0.00000026991;
 const liczba To =0.00021;
 
+const  int opoz = int(To/h);
 
 // const liczba Tp = 0.21;
 // const liczba Ti =0.0031;
@@ -23,16 +26,16 @@ const liczba To =0.00021;
 // const liczba To =1;
 
 
-
+// double gug[1000000] = {0};
 
 struct tabs{
-    liczba czas[dlugSym] ={0};
-    liczba R[dlugSym]={0};
-    liczba Yczuj[dlugSym] = {0};
-    liczba Y[dlugSym]={0};
-    liczba e[dlugSym] = {0};
-    liczba U[dlugSym] = {0};
-    liczba Uster[dlugSym] = {0};
+    liczba* czas {new liczba[dlugSym]};
+    liczba* R {new liczba[dlugSym]};
+     liczba* Yczuj {new liczba[dlugSym]};
+     liczba* Y {new liczba[dlugSym]};
+     liczba* e {new liczba[dlugSym]};
+     liczba* U {new liczba[dlugSym]};
+     liczba* Uster {new liczba[dlugSym]};
 
 };
 
@@ -55,6 +58,19 @@ void inicjalizujTablice(tabs& tab){
 }
 
 
+void czyscTablice(tabs& tab){
+
+delete[] tab.czas;
+delete[] tab.R;
+delete[] tab.Yczuj;
+delete[] tab.Y;
+delete[] tab.U;
+delete[] tab.Uster;
+delete[] tab.e;
+ 
+
+}
+
 liczba obiekt(liczba syg ){
 
     static liczba Y,Y1,Y2,Y3,Y4;
@@ -76,7 +92,7 @@ liczba obiekt(liczba syg ){
 }
 
 liczba P(liczba syg){
-    const liczba P = 1;
+    const liczba P = 0.04;
     return syg*P;
 }
 
@@ -133,13 +149,13 @@ int zapiszPlik(tabs tab, std::ofstream &plik){
 void obliczenia(tabs& tab){
     liczba syg =0;
 
-    for (int i=0; i<dlugSym -1; i++) {
+    for (int i=0; i<dlugSym -1-opoz*5; i++) {
         
         tab.e[i] = tab.R[i] -tab.Yczuj[i] ;
         tab.U[i] = P(tab.e[i]);
         tab.Uster[i] = nasycenie(tab.U[i]);     
-        tab.Y[i+1] = obiekt(tab.Uster[i]);
-        tab.Yczuj[i+1] = czujnik(tab.Y[i]);
+        tab.Y[i+1 +opoz*5] = obiekt(tab.Uster[i]);
+        tab.Yczuj[i+1 +opoz] = czujnik(tab.Y[i]);
                 
          }
     return;
@@ -156,6 +172,8 @@ int main(){
     obliczenia(tab);
     
     zapiszPlik(tab,plik);
+
+    czyscTablice(tab);
     
     return 0;
 }
