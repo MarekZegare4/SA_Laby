@@ -50,19 +50,6 @@ ylabel("e(t)")
 legend("Pobudzenie r(t) =t")
 grid on
 
-% 
-% bodeSym = csvread("Bode_sym.csv",0,0);
-% wzm = bodeSym(:,1);
-% faza = (bodeSym(:,2));
-% freqs = bodeSym(:,3);
-
-% figure(3)
-% plot(czas,R,czas,Y,czas,a)
-% title('Porównanie dziłania sterownika PID pod kątem ogranicznenia wewnętrznej zmiennej członu całkującego')
-% xlabel("Czas [s]")
-% ylabel("Sygnał")
-% grid on
-% legend("Pobudzenie","Z ograniczeniem", "Bez ograniczenia")
 
 
 

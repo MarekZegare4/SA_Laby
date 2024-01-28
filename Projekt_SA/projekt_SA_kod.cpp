@@ -7,7 +7,7 @@
 typedef double liczba;
 
 
-const bool BODE = true;
+const bool BODE = false;
 const  liczba h = 0.000001;
 const double czasKoniec =0.1;
 const unsigned int dlugSym = int(czasKoniec/h +1); 
