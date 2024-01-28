@@ -7,9 +7,9 @@
 typedef double liczba;
 
 
-const bool bode = false;
-const  liczba h = 0.00001;
-const double czasKoniec = 1;
+const bool BODE = true;
+const  liczba h = 0.000001;
+const double czasKoniec =0.1;
 const unsigned int dlugSym = int(czasKoniec/h +1); 
 
 const liczba Tp = 0.002249;
@@ -48,16 +48,17 @@ void inicjalizujTablice(tabs& tab,liczba freq){
     for(int i=0; i<dlugSym; i++){
         
         tab.czas[i] = h*i;
-       // tab.R[i] =sin(h*i*2*M_PI*freq);
+        tab.R[i] = 1;
+        if(BODE)
+             tab.R[i] =sin(h*i*2*M_PI*freq);
         //tab.R[i] = h*i;
         
-        int prog = 10000;
+        // int prog = 10000;
 
-        if(i<prog || (i> 2*prog && i< 3*prog )|| (i>4*prog && i< 5*prog))
-            tab.R[i] = 1;
-        }  
-
-   // odp impuslowa
+        // if(i<prog || (i> 2*prog && i< 3*prog )|| (i>4*prog && i< 5*prog))
+        //     tab.R[i] = 1;
+        // }  
+    }
 }
 
 
@@ -101,9 +102,9 @@ liczba P(liczba syg, liczba P =0.03){
 
 liczba PID(liczba syg){
 
-    const liczba Kp2 = 0.6*5.3 *1;
-    const liczba Ti2 = 0.5 * 0.01567 * 1.6;
-    const liczba Td2 = 0.125*0.01567 * 1.3; 
+    const liczba Kp2 = 0.6*5.3 *1.15;
+    const liczba Ti2 = 0.5 * 0.01567 *1.7;
+    const liczba Td2 = 0.125*0.01567 *1.2; 
     const liczba Ta =1.1;
 
     static liczba  Y, Us;
@@ -113,11 +114,11 @@ liczba PID(liczba syg){
     const liczba Ti = 0.00579 ;
     const liczba Td = 0.001448;
 
-    Y = Kp2*syg + Kp2*Td2*(syg-Us)/h + calk*(Kp2/Ti2);
+    Y = Kp2*(syg +Td2*(syg-Us)/h + calk/Ti2);
 
     liczba Ysat = nasycenie(Y);
 
-    calk += (((Ysat-Y)/Ta)+syg)*h;
+    calk += (((Ysat-Y)/Ta) +syg)*h; //
     Us = syg;
 
     return Y;
@@ -171,13 +172,12 @@ int zapiszPlik(tabs tab, std::ofstream &plik){
 
 
 void obliczenia(tabs& tab){
-    liczba syg =0;
 
     for (int i=0; i<dlugSym -1-opoz*5; i++) {
         
         tab.e[i] = tab.R[i] -tab.Yczuj[i] ;
         tab.U[i] = P(tab.e[i]);
-        tab.U[i] = PID(tab.U[i]);
+       // tab.U[i] = PID(tab.U[i]);
         tab.Uster[i] = nasycenie(tab.U[i]);     
         tab.Y[i+1 +opoz*5] = obiekt(tab.Uster[i]);
         tab.Yczuj[i+1 +opoz] = czujnik(tab.Y[i]);
@@ -198,7 +198,7 @@ std::tuple<liczba,liczba> Bode(liczba* Y,liczba* R,liczba freq){
     int maxYidx =0,maxRidx =0;
 
 
-    for(int i=dlugSym; i>(dlugSym-1)*0.8;i--){
+    for(int i=dlugSym-1; i>(dlugSym-1)*0.4;i--){
 
 
         if(Y[i]>maxY){
@@ -226,7 +226,7 @@ int main(){
     std::ofstream plik("Wyjscie_symulacji.csv");
     std::ofstream plikBode("Bode_sym.csv");
 
-    if(bode){
+    if(BODE){
 
     int dlug = 59; // ???vdokjvcsnjbnijb
 
@@ -237,9 +237,9 @@ int main(){
     liczba tmpFaza =0, tmpWzm =0;
 
     for(long int i=0; i<6;i++)
-        for(long int j=0; j<10;j++){
-            freqs[10*i +j ] = j *pow(10,i);
-            std::cout << freqs[10*i + j] <<' ';
+        for(long int j=1; j<10;j++){
+            freqs[10*i +j -1 ] = (j) *pow(10,i);
+            std::cout << freqs[10*i + j -1] <<' ';
         }
         
     std::cout<< "Wzm :    " <<"faza"<<std::endl;    

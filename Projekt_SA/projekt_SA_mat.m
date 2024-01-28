@@ -34,7 +34,7 @@ int =1500;
 
 figure(1)
 hold on
-plot(czas,R,czas,Y)
+plot(czas,Y)
 title("Odpowiedź skokowa układu ze sterownikiem PID")
 xlabel("Czas [s]")
 ylabel("Sygnał")
