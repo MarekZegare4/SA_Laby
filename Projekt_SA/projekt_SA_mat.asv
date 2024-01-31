@@ -16,10 +16,9 @@ e = tab(4:end,2);
 czas = tab(4:end,3);
 R = tab(4:end,4);
 
-figure(1)
+figure(2)
 hold on
-plot(czas,e)
-axis([0 0.1 0 10])
+plot(czas,Y)
 title("Odpowiedź skokowa układu ze sterownikiem LEAD")
 xlabel("Czas [s]")
 ylabel("Sygnał")
@@ -91,22 +90,6 @@ r1 = det(s*eye(4) - A +L*C)
 
 solve(r1==eq2, l1, l2, l3, l4, s)
 eqs = [fgh(1) ==1, fgh(2) == 3764.9, fgh(3) == 7579883.1, fgh(4) == 221996400.0];
-awe = solve(eqs, l1, l2, l3, l4);
-
-
-vpa(awe.l1,3)
-vpa(awe.l2,3)
-vpa(awe.l3,3)
-vpa(awe.l4,3)
-
-
-
-r2 = 
-
-
-
-
-
-
+solve(eqs, )
 
 
